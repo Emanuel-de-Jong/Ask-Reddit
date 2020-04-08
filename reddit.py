@@ -10,4 +10,3 @@ reddit = praw.Reddit(
 
 print(reddit.user.me())
 print(reddit.read_only)
-#commit from IDE test
