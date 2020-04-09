@@ -1,3 +1,4 @@
+import copy
 import praw
 import reddit_login
 
@@ -31,9 +32,12 @@ def init(subreddit='askreddit', sort='top', time='day', row=1):
         post = submission
 
 
-def get_top_level_comments(comment_count=10, seperate_body_sentences=True):
-    comments = post.comments
-    comments.replace_more(limit=0)
+def get_top_level_comments(comment_count=99, seperate_body_sentences=True, sort='best'):
+    temp_post = copy.deepcopy(post)
+    temp_post.comment_sort = sort
+    temp_post.comments.replace_more(limit=0)
+
+    comments = temp_post.comments
 
     if comment_count > len(comments):
         comment_count = len(comments)
@@ -54,7 +58,8 @@ def get_top_level_comments(comment_count=10, seperate_body_sentences=True):
         body = comment.body
 
         if seperate_body_sentences:
-            body = [s + '.' for s in body.split('.') if s]
+            d = '. '
+            body = [s + d for s in body.split(d) if s]
 
         comment_list[i]['body'] = body
 

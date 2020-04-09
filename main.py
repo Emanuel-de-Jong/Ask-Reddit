@@ -1,9 +1,10 @@
 import reddit as rd
-# import tts as tts
+import tts as tts
 # import video as vid
 
 if __name__ == '__main__':
     rd.init()
-    comments = rd.get_top_level_comments()
-    print(rd.post.title)
-    print(comments[7])
+    comment_list = rd.get_top_level_comments()
+    print(comment_list[0])
+
+    # tts.init(comment_list)
