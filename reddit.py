@@ -6,7 +6,7 @@ reddit = None
 post = None
 
 
-def init(subreddit='askreddit', sort='top', time='day'):
+def init(subreddit='askreddit', sort='top', time='day', row=1):
     global reddit
     reddit = praw.Reddit(
         user_agent='windows:analyzer:v0.1 (by u/KillBottt)',
@@ -16,22 +16,22 @@ def init(subreddit='askreddit', sort='top', time='day'):
         password=reddit_login.password)
 
     if sort == 'new':
-        submissions = reddit.subreddit(subreddit).new(limit=1)
+        submissions = reddit.subreddit(subreddit).new(limit=row)
     elif sort == 'hot':
-        submissions = reddit.subreddit(subreddit).hot(limit=1)
+        submissions = reddit.subreddit(subreddit).hot(limit=row)
     elif sort == 'rising':
-        submissions = reddit.subreddit(subreddit).rising(limit=1)
+        submissions = reddit.subreddit(subreddit).rising(limit=row)
     elif sort == 'top':
-        submissions = reddit.subreddit(subreddit).top(time, limit=1)
+        submissions = reddit.subreddit(subreddit).top(time, limit=row)
     elif sort == 'controversial':
-        submissions = reddit.subreddit(subreddit).controversial(time, limit=1)
+        submissions = reddit.subreddit(subreddit).controversial(time, limit=row)
 
     global post
     for submission in submissions:
         post = submission
 
 
-def get_top_level_comments(comment_count=10):
+def get_top_level_comments(comment_count=10, seperate_body_sentences=True):
     comments = post.comments
     comments.replace_more(limit=0)
 
@@ -45,11 +45,17 @@ def get_top_level_comments(comment_count=10):
         comment_list.append(
             {
                 "author": comment.author.name,
-                "body": comment.body,
                 "created_utc": comment.created_utc,
                 "is_submitter": comment.is_submitter,
                 "score": comment.score
             }
         )
+
+        body = comment.body
+
+        if seperate_body_sentences:
+            body = [s + '.' for s in body.split('.') if s]
+
+        comment_list[i]['body'] = body
 
     return comment_list

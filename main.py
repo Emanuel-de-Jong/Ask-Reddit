@@ -5,4 +5,5 @@ import reddit as rd
 if __name__ == '__main__':
     rd.init()
     comments = rd.get_top_level_comments()
-    print(comments[2]['author'])
+    print(rd.post.title)
+    print(comments[7])
