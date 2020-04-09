@@ -1,20 +1,33 @@
 from moviepy.editor import *
-
-text_list = ["Piggy", "Kermit", "Gonzo", "Fozzie"]
-clip_list = []
+import soundfile as sf
 
 
-for text in text_list:
-    print('end')
-    try:
-        txt_clip = TextClip(text, fontsize = 70, color = 'white').set_duration(2)
-        clip_list.append(txt_clip)
-    except UnicodeEncodeError:
-        txt_clip = TextClip("Issue with text", fontsize = 70, color = 'white').set_duration(2)
-        clip_list.append(txt_clip)
+def create_video(comment_list, fontsize=20, color='white', fps=24, codec='mpeg4'):
+    clip_list = []
 
-final_clip = concatenate(clip_list, method = "compose")
-final_clip.write_videofile("my_concatenation.mp4", fps = 24, codec = 'mpeg4')
+    for i in range(len(comment_list)):
+        comment = comment_list[i]
+
+        for j in range(len(comment['body'])):
+            sentence = comment['body'][j]
+
+            file = sf.SoundFile('comments\\' + str(i) + '-' + str(j) + '.mp3')
+            file_length = round(len(file) / file.samplerate)
+
+            try:
+                clip = TextClip(sentence, fontsize=fontsize, color=color)
+                clip = clip.set_duration(file_length)
+                clip_list.append(clip)
+            except UnicodeEncodeError:
+                print('video create_video error:')
+                print('UnicodeEncodeError while initializing TextClip with txt:')
+                print(sentence)
+
+    video = concatenate(clip_list, method="compose")
+    video.write_videofile("video.mp4", fps=fps, codec=codec)
+
+    print('video create_video complete')
+    return True
 
 
 

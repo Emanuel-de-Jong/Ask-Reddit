@@ -1,6 +1,6 @@
 import reddit as rd
 import tts as tts
-# import video as vid
+import video as vid
 
 if __name__ == '__main__':
     # rd.init()
@@ -47,5 +47,7 @@ if __name__ == '__main__':
         }
     ]
 
-    tts.init()
-    tts.convert_comments_to_audio(comment_list)
+    # tts.init()
+    # tts.convert_comments_to_audio(comment_list)
+
+    vid.create_video(comment_list)

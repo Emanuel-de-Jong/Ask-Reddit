@@ -1,6 +1,6 @@
 import copy
 import praw
-import reddit_login
+import reddit_login as rl
 
 
 reddit = None
@@ -11,10 +11,10 @@ def init(subreddit='askreddit', sort='top', time='day', row=1):
     global reddit
     reddit = praw.Reddit(
         user_agent='windows:analyzer:v0.1 (by u/KillBottt)',
-        client_id=reddit_login.client_id,
-        client_secret=reddit_login.client_secret,
-        username=reddit_login.username,
-        password=reddit_login.password)
+        client_id=rl.client_id,
+        client_secret=rl.client_secret,
+        username=rl.username,
+        password=rl.password)
 
     if sort == 'new':
         submissions = reddit.subreddit(subreddit).new(limit=row)
