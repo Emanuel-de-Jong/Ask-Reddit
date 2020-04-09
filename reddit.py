@@ -31,19 +31,22 @@ def init(subreddit='askreddit', sort='top', time='day', row=1):
     for submission in submissions:
         post = submission
 
+    print('reddit init complete')
+    return True
 
-def get_top_level_comments(comment_count=99, seperate_body_sentences=True, sort='best'):
+
+def get_top_level_comments(count=10, sort='best', seperate_body_sentences=True):
     temp_post = copy.deepcopy(post)
     temp_post.comment_sort = sort
     temp_post.comments.replace_more(limit=0)
 
     comments = temp_post.comments
 
-    if comment_count > len(comments):
-        comment_count = len(comments)
+    if count > len(comments):
+        count = len(comments)
 
     comment_list = []
-    for i in range(comment_count):
+    for i in range(count):
         comment = comments[i]
 
         comment_list.append(
@@ -60,7 +63,9 @@ def get_top_level_comments(comment_count=99, seperate_body_sentences=True, sort=
         if seperate_body_sentences:
             d = '. '
             body = [s + d for s in body.split(d) if s]
+            body[-1] = body[-1][:-2]
 
         comment_list[i]['body'] = body
 
+    print('reddit get_top_level_comments complete')
     return comment_list

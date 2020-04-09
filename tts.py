@@ -4,32 +4,29 @@ import pyttsx3
 engine = None
 
 
-def init():
-   global engine
-   engine = pyttsx3.init()
+def init(voice='HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0',
+         rate=150, volume=1.0):
+    global engine
+    engine = pyttsx3.init()
+
+    engine.setProperty('voice', voice)
+    engine.setProperty('rate', rate)
+    engine.setProperty('volume', volume)
+
+    print('tts init complete')
+    return True
 
 
-# voices = engine.getProperty('voices')
-# for voice in voices:
-#    print(voice.name)
-#    engine.setProperty('voice', voice.id)
-#    engine.say('The quick brown fox jumped over the lazy dog.')
-#
-# engine.runAndWait()
+def convert_comments_to_audio(comment_list, extension='mp3'):
+    for i in range(len(comment_list)):
+        comment = comment_list[i]
 
-# def onStart(name):
-#    print 'starting', name
-# def onWord(name, location, length):
-#    print 'word', name, location, length
-# def onEnd(name, completed):
-#    print 'finishing', name, completed
-#    if name == 'fox':
-#       engine.say('What a lazy dog!', 'dog')
-#    elif name == 'dog':
-#       engine.endLoop()
-# engine = pyttsx3.init()
-# engine.connect('started-utterance', onStart)
-# engine.connect('started-word', onWord)
-# engine.connect('finished-utterance', onEnd)
-# engine.say('The quick brown fox jumped over the lazy dog.', 'fox')
-# engine.startLoop()
+        for j in range(len(comment['body'])):
+            sentence = comment['body'][j]
+
+            engine.save_to_file(sentence, 'comments\\' + str(i) + '-' + str(j) + '.' + extension)
+
+    engine.runAndWait()
+
+    print('tts convert_comments_to_audio complete')
+    return True
