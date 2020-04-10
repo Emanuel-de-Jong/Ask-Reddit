@@ -15,21 +15,14 @@ def create_video(comment_list, fontsize=20, color='white', fps=24, codec='mpeg4'
             file = sf.SoundFile(audio_path)
             file_length = round(len(file) / file.samplerate)
 
-            try:
-                videoclip = TextClip(sentence, fontsize=fontsize, color=color)
-                videoclip = videoclip.set_duration(file_length)
+            videoclip = TextClip(sentence, fontsize=fontsize, color=color)
+            videoclip = videoclip.set_duration(file_length)
 
-                audioclip = AudioFileClip(audio_path)
+            audioclip = AudioFileClip(audio_path)
 
-                clip = videoclip.set_audio(audioclip)
+            clip = videoclip.set_audio(audioclip)
 
-                clip_list.append(clip)
-            except UnicodeEncodeError:
-                print('video create_video error:')
-                print('UnicodeEncodeError while initializing TextClip with txt:')
-                print(sentence)
-                print('or AudioFileClip at:')
-                print(audio_path)
+            clip_list.append(clip)
 
     video = concatenate(clip_list, method="compose")
     video.write_videofile("video.mp4", fps=fps, codec=codec)
