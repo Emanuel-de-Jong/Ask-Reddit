@@ -10,18 +10,26 @@ def create_video(comment_list, fontsize=20, color='white', fps=24, codec='mpeg4'
 
         for j in range(len(comment['body'])):
             sentence = comment['body'][j]
+            audio_path = 'comments\\' + str(i) + '-' + str(j) + '.mp3'
 
-            file = sf.SoundFile('comments\\' + str(i) + '-' + str(j) + '.mp3')
+            file = sf.SoundFile(audio_path)
             file_length = round(len(file) / file.samplerate)
 
             try:
-                clip = TextClip(sentence, fontsize=fontsize, color=color)
-                clip = clip.set_duration(file_length)
+                videoclip = TextClip(sentence, fontsize=fontsize, color=color)
+                videoclip = videoclip.set_duration(file_length)
+
+                audioclip = AudioFileClip(audio_path)
+
+                clip = videoclip.set_audio(audioclip)
+
                 clip_list.append(clip)
             except UnicodeEncodeError:
                 print('video create_video error:')
                 print('UnicodeEncodeError while initializing TextClip with txt:')
                 print(sentence)
+                print('or AudioFileClip at:')
+                print(audio_path)
 
     video = concatenate(clip_list, method="compose")
     video.write_videofile("video.mp4", fps=fps, codec=codec)
@@ -29,6 +37,14 @@ def create_video(comment_list, fontsize=20, color='white', fps=24, codec='mpeg4'
     print('video create_video complete')
     return True
 
+
+
+
+# audio = AudioFileClip("audio.mp3")
+# video1 = VideoFileClip("video1.mp4")
+# video2 = VideoFileClip("video2.mp4")
+# final = concatenate_videoclips([video1, video2]).set_audio(audio)
+# final.write_videofile("output.mp4")
 
 
 
