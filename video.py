@@ -1,5 +1,4 @@
 from moviepy.editor import *
-import soundfile as sf
 
 
 def create_video(comment_list, fontsize=20, color='white', fps=24, codec='mpeg4'):
@@ -10,15 +9,14 @@ def create_video(comment_list, fontsize=20, color='white', fps=24, codec='mpeg4'
 
         for j in range(len(comment['body'])):
             sentence = comment['body'][j]
+
             audio_path = 'comments\\' + str(i) + '-' + str(j) + '.mp3'
 
-            file = sf.SoundFile(audio_path)
-            file_length = round(len(file) / file.samplerate)
+            audioclip = AudioFileClip(audio_path)
+            audioclip = CompositeAudioClip([audioclip])
 
             videoclip = TextClip(sentence, fontsize=fontsize, color=color)
-            videoclip = videoclip.set_duration(file_length)
-
-            audioclip = AudioFileClip(audio_path)
+            videoclip = videoclip.set_duration(audioclip.duration)
 
             clip = videoclip.set_audio(audioclip)
 
@@ -31,6 +29,14 @@ def create_video(comment_list, fontsize=20, color='white', fps=24, codec='mpeg4'
     return True
 
 
+
+
+# videoclip = VideoFileClip("filename.mp4")
+# audioclip = AudioFileClip("audioname.mp3")
+#
+# new_audioclip = CompositeAudioClip([audioclip])
+# videoclip.audio = new_audioclip
+# videoclip.write_videofile("new_filename.mp4")
 
 
 # audio = AudioFileClip("audio.mp3")
