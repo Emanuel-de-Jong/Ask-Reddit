@@ -1,21 +1,26 @@
 from moviepy.editor import *
 
 
-def create_video(comment_list, title, fontsize=30, text_color='white', fps=24, codec='mpeg4', screen_size=(1920, 1080), bg_image='background.jpg'):
+def create_video(comment_list, title, fontsize=30, text_color='white', fps=24, screen_size=(1920, 1080), bg_image='background.jpg'):
     commentclip_list = []
 
     for i in range(len(comment_list)):
         comment = comment_list[i]
+        text = ""
         sentenceclip_list = []
 
         for j in range(len(comment['body'])):
             sentence = comment['body'][j]
 
+            text = text + sentence
+
             audio_path = 'comments\\' + str(i) + '-' + str(j) + '.mp3'
             audioclip = AudioFileClip(audio_path)
             audioclip = CompositeAudioClip([audioclip])
 
-            textclip = TextClip(sentence, fontsize=fontsize, color=text_color, method='caption', align='West').set_duration(audioclip.duration)
+            textclip = TextClip(text, fontsize=fontsize, size=(1280, 720), color=text_color, method='label', align='West')
+            textclip = textclip.set_duration(audioclip.duration)
+            textclip = textclip.set_position((100, 100))
 
             sentenceclip = textclip.set_audio(audioclip)
             sentenceclip_list.append(sentenceclip)
@@ -28,7 +33,7 @@ def create_video(comment_list, title, fontsize=30, text_color='white', fps=24, c
     background = ImageClip(bg_image, transparent=False)
 
     video = CompositeVideoClip([background, video], use_bgclip=True, size=screen_size)
-    video.write_videofile("video.mp4", fps=fps, codec=codec)
+    video.write_videofile("video.mp4", fps=fps)
 
     print('video create_video complete')
     return True

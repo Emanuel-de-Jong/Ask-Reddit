@@ -34,4 +34,4 @@ if __name__ == '__main__':
     # tts.convert_comments_to_audio(comment_list)
 
     # vid.create_video(comment_list, rd.post.title)
-    vid.create_video(comment_list, "What is this title?", screen_size=(1280, 720))
+    vid.create_video(comment_list, "What is this title?")
