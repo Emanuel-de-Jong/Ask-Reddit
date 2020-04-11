@@ -1,28 +1,33 @@
 from moviepy.editor import *
 
 
-def create_video(comment_list, fontsize=20, color='white', fps=24, codec='mpeg4'):
-    clip_list = []
+def create_video(comment_list, title, fontsize=30, text_color='white', fps=24, codec='mpeg4', screen_size=(1920, 1080), bg_image='background.jpg'):
+    commentclip_list = []
 
     for i in range(len(comment_list)):
         comment = comment_list[i]
+        sentenceclip_list = []
 
         for j in range(len(comment['body'])):
             sentence = comment['body'][j]
 
             audio_path = 'comments\\' + str(i) + '-' + str(j) + '.mp3'
-
             audioclip = AudioFileClip(audio_path)
             audioclip = CompositeAudioClip([audioclip])
 
-            videoclip = TextClip(sentence, fontsize=fontsize, color=color)
-            videoclip = videoclip.set_duration(audioclip.duration)
+            textclip = TextClip(sentence, fontsize=fontsize, color=text_color, method='caption', align='West').set_duration(audioclip.duration)
 
-            clip = videoclip.set_audio(audioclip)
+            sentenceclip = textclip.set_audio(audioclip)
+            sentenceclip_list.append(sentenceclip)
 
-            clip_list.append(clip)
+        commentclip = concatenate(sentenceclip_list, method="compose")
+        commentclip_list.append(commentclip)
 
-    video = concatenate(clip_list, method="compose")
+    video = concatenate(commentclip_list, method="compose")
+
+    background = ImageClip(bg_image, transparent=False)
+
+    video = CompositeVideoClip([background, video], use_bgclip=True, size=screen_size)
     video.write_videofile("video.mp4", fps=fps, codec=codec)
 
     print('video create_video complete')
@@ -31,19 +36,33 @@ def create_video(comment_list, fontsize=20, color='white', fps=24, codec='mpeg4'
 
 
 
-# videoclip = VideoFileClip("filename.mp4")
-# audioclip = AudioFileClip("audioname.mp3")
+
+
+# screensize = (1920,1080)
+# text = ('''MoviePy is a Python module for video editing, which can be used for basic operations (like cuts, concatenations, title insertions), video compositing (a.k.a. non-linear editing), video processing, or to create advanced effects. It can read and write the most common video formats, including GIF.''')
 #
-# new_audioclip = CompositeAudioClip([audioclip])
-# videoclip.audio = new_audioclip
-# videoclip.write_videofile("new_filename.mp4")
-
-
-# audio = AudioFileClip("audio.mp3")
-# video1 = VideoFileClip("video1.mp4")
-# video2 = VideoFileClip("video2.mp4")
-# final = concatenate_videoclips([video1, video2]).set_audio(audio)
-# final.write_videofile("output.mp4")
+# text_list = text.split(" ")
+#
+#
+#
+# clip_list = []
+# i = 0
+# b = 4
+# while len(text_list) + 1 > b:
+#
+#     text = str(" ".join(text_list[i:b]))
+#     try:
+#         txt_clip = TextClip(text, fontsize = 50, color = 'black',size=screensize,bg_color = 'white',method='caption',align='West').set_duration(1)
+#         clip_list.append(txt_clip)
+#         b += 4
+#
+#     except UnicodeEncodeError:
+#         txt_clip = TextClip("Issue with text", fontsize = 70, color = 'white').set_duration(2)
+#         clip_list.append(txt_clip)
+#
+# final_clip = concatenate(clip_list, method = "compose")
+#
+# final_clip.write_videofile("my_concatenation9.mp4", fps = 24, codec = 'mpeg4')
 
 
 
