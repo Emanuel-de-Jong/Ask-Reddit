@@ -35,7 +35,7 @@ def init(subreddit='askreddit', sort='top', time='day', row=1):
     return True
 
 
-def get_top_level_comments(count=10, sort='best', seperate_body_sentences=True):
+def get_top_level_comments(count=10, sort='best'):
     temp_post = copy.deepcopy(post)
     temp_post.comment_sort = sort
     temp_post.comments.replace_more(limit=0)
@@ -60,10 +60,9 @@ def get_top_level_comments(count=10, sort='best', seperate_body_sentences=True):
 
         body = comment.body
 
-        if seperate_body_sentences:
-            d = '. '
-            body = [s + d for s in body.split(d) if s]
-            body[-1] = body[-1][:-2]
+        d = '. '
+        body = [s + d for s in body.split(d) if s]
+        body[-1] = body[-1][:-2]
 
         comment_list[i]['body'] = body
 

@@ -18,9 +18,8 @@ def create_video(comment_list, title, fontsize=30, text_color='white', fps=24, s
             audioclip = AudioFileClip(audio_path)
             audioclip = CompositeAudioClip([audioclip])
 
-            textclip = TextClip(text, fontsize=fontsize, size=(1280, 720), color=text_color, method='label', align='West')
+            textclip = TextClip(text, fontsize=fontsize, size=(1280, 1080), color=text_color, method='caption', align='West')
             textclip = textclip.set_duration(audioclip.duration)
-            textclip = textclip.set_position((100, 100))
 
             sentenceclip = textclip.set_audio(audioclip)
             sentenceclip_list.append(sentenceclip)
