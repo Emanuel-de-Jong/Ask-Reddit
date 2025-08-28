@@ -10,3 +10,4 @@ Automatically creates videos of Reddit posts. It goes through these steps:
 | | |
 | :---: | :---: |
 | ![](/Screenshots/.png) | ![](/Screenshots/.png) |
+ 
